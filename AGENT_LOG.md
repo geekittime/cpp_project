@@ -36,3 +36,11 @@
 - **Human intervention:** User confirmed ShipCheck and real GitHub API auditing.
 - **Lesson:** Treat upstream error mapping and explicit omissions as part of the product, not cleanup work.
 
+## 2026-05-31T00:45:00+08:00 - Implementation Plan
+
+- **Task:** `PLAN-01`
+- **Skills:** `writing-plans`
+- **Context:** Converted the approved specification into ten TDD tasks with exact file ownership, dependency ordering, worktree groups, failing-test expectations, and verification commands.
+- **Key prompt strategy:** Each behavior task starts with a test that fails for a named missing capability. Configuration-only files are added beside the behavior that exercises them.
+- **Human intervention:** The user delegated low-risk choices and requested continuous completion.
+- **Lesson:** Plan around independently testable boundaries first; assign worktrees only after boundaries are explicit.
