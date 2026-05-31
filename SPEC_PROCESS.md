@@ -60,9 +60,49 @@ The course handout described an older Open Design inventory. The inspected READM
 
 ## Cold-Start Validation
 
-This section will be completed after `PLAN.md` exists and a fresh Claude Code session receives only `SPEC.md` and `PLAN.md`.
+### Required Different-Agent Attempt
+
+A fresh non-persistent Claude Code session was started in the isolated `validation/coldstart-claude` worktree with instructions to read only `SPEC.md` and `PLAN.md`, stop on uncertainty, and attempt Task 1 with TDD. Claude Code was installed and authenticated, but the provider returned:
+
+```text
+401 quota exhausted
+```
+
+This is an external provider limitation. It prevents completion of the rubric's strict different-agent implementation run on this machine. The limitation is recorded instead of being hidden.
+
+### Isolated Fallback Pressure Test
+
+A fresh non-persistent Codex CLI session was then started in the same isolated worktree with the same document-only constraint. This fallback is useful specification evidence, but it does **not** fully satisfy the "different agent type" requirement because the primary session also uses Codex.
+
+The fallback worker stopped before editing and asked:
+
+1. What exact ordered checklist items should seed `AI4SE Final Project`?
+2. Should `src/config.js` and `src/domain/errors.js` be created as empty/minimal modules in Task 1, or deferred until behavior requires them?
+
+### Defects Exposed
+
+- `SPEC.md` described valid checklist item shapes but failed to enumerate the protected built-in template.
+- `PLAN.md` listed two files too early, inviting empty placeholder modules and inconsistent agent interpretations.
+
+### Key Revision Diff
+
+```diff
++ The built-in AI4SE Final Project template contains these ordered items:
++ readme, docker, ci-workflow, repository-description, spec-document,
++ plan-document, cold-start-validation, agent-log, public-image, reflection
+
+ Task 1 files:
+- src/config.js
+- src/domain/errors.js
++ src/db/database.js
++ src/db/migrate.js
+
++ Task 2 creates src/domain/errors.js when domain validation first needs it.
++ Task 9 creates src/config.js when server environment parsing is tested.
+```
+
+The revised documents remove both ambiguities. A later submission still needs one successful fresh Claude Code, Cursor, Gemini CLI, OpenCode, or Qwen Code implementation run after provider quota is available.
 
 ## Reflection On Brainstorming
 
 The strongest part of Superpowers brainstorming is its implementation gate. It forced product scope, error handling, and runtime constraints to be decided before scaffolding. The awkward part is that its ideal question-by-question rhythm can become ceremonial when the human explicitly delegates low-risk choices. In this project, delegated decisions are recorded with reasons instead of prompting for approval on every small option.
-

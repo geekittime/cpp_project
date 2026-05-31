@@ -44,3 +44,13 @@
 - **Key prompt strategy:** Each behavior task starts with a test that fails for a named missing capability. Configuration-only files are added beside the behavior that exercises them.
 - **Human intervention:** The user delegated low-risk choices and requested continuous completion.
 - **Lesson:** Plan around independently testable boundaries first; assign worktrees only after boundaries are explicit.
+
+## 2026-05-31T01:00:00+08:00 - Cold-Start Specification Validation
+
+- **Task:** `COLDSTART-01`
+- **Skills:** `using-git-worktrees`, `test-driven-development`
+- **Context:** Created `validation/coldstart-claude`. A fresh Claude Code session received only `SPEC.md` and `PLAN.md`, but its provider returned `401 quota exhausted`. A fresh non-persistent Codex CLI fallback session received the same restricted context.
+- **Key output:** The fallback worker stopped before editing and asked for the exact built-in checklist items and the intended timing of `src/config.js` and `src/domain/errors.js`.
+- **Human intervention:** None. The documents were revised to enumerate ten built-in items and move files to their first behavior-owning tasks.
+- **Deviation:** The successful pressure test used the same agent type as the primary session. A strict different-agent retry remains necessary when Claude Code provider quota is restored.
+- **Lesson:** If a worker asks whether to create an empty module, the plan has probably assigned the file too early.

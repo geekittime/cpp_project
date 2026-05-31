@@ -78,10 +78,8 @@ The local exercise may merge feature branches locally because no GitHub remote i
 **Files:**
 
 - Create: `package.json`
-- Create: `src/config.js`
 - Create: `src/db/database.js`
 - Create: `src/db/migrate.js`
-- Create: `src/domain/errors.js`
 - Create: `test/helpers/database.js`
 - Test: `test/db/migrate.test.js`
 
@@ -109,7 +107,7 @@ Add `package.json` scripts:
 }
 ```
 
-Use `DatabaseSync` from `node:sqlite`, enable foreign keys, create the five tables from `SPEC.md`, and seed the protected AI4SE checklist with automated and manual items.
+Use `DatabaseSync` from `node:sqlite`, enable foreign keys, create the five tables from `SPEC.md`, and seed the protected AI4SE checklist with the exact ten ordered items enumerated in `SPEC.md` section 5.2.
 
 - [ ] **Step 4: Verify GREEN**
 
@@ -131,6 +129,7 @@ git commit -m "feat: add SQLite baseline and built-in checklist [subagent: runti
 **Files:**
 
 - Create: `src/domain/github-url.js`
+- Create: `src/domain/errors.js`
 - Create: `src/domain/template.js`
 - Create: `src/domain/rules.js`
 - Create: `src/domain/report.js`
@@ -580,4 +579,3 @@ git commit -m "docs: complete ShipCheck delivery evidence [primary: Codex]"
 - No task requires Python, Docker at local test time, `gh`, or `make`.
 - Docker image execution remains verifiable in CI even though Docker is unavailable on the local workstation.
 - Generated configuration files are exempt from test-first ordering only where no executable behavior exists. Runtime behavior remains test-first.
-

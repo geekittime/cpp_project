@@ -100,6 +100,21 @@ Supported automated rules:
 - `{ "type": "directory_exists", "path": ".github/workflows" }`
 - `{ "type": "repository_has_description" }`
 
+The built-in `AI4SE Final Project` template contains these ordered items:
+
+| Key | Kind | Severity | Rule Or Evidence Expectation |
+| --- | --- | --- | --- |
+| `readme` | `automated` | `blocking` | `{ "type": "file_exists", "path": "README.md" }` |
+| `docker` | `automated` | `blocking` | `{ "type": "file_any_exists", "paths": ["Dockerfile", "docker-compose.yml"] }` |
+| `ci-workflow` | `automated` | `blocking` | `{ "type": "directory_exists", "path": ".github/workflows" }` |
+| `repository-description` | `automated` | `advisory` | `{ "type": "repository_has_description" }` |
+| `spec-document` | `manual` | `blocking` | Evidence that `SPEC.md` was reviewed. |
+| `plan-document` | `manual` | `blocking` | Evidence that `PLAN.md` was reviewed. |
+| `cold-start-validation` | `manual` | `blocking` | Evidence of the isolated second-agent validation. |
+| `agent-log` | `manual` | `blocking` | Evidence that `AGENT_LOG.md` records the workflow. |
+| `public-image` | `manual` | `blocking` | Public Docker Hub or GHCR image URL. |
+| `reflection` | `manual` | `advisory` | Evidence that the student-authored reflection is present. |
+
 **Behavior:** Ship one protected built-in template named `AI4SE Final Project`. A built-in template may be read or copied, but not edited or deleted. Custom templates may be created by copying an existing template, edited, and deleted when no project references them.
 
 **Output:** Template records with item counts, built-in status, and ordered items.
@@ -352,4 +367,3 @@ Linear's dark native surfaces, restrained indigo accent, subtle borders, and inf
 ## 13. Deliberate Omissions
 
 ShipCheck does not execute repository tests, parse arbitrary YAML, validate Docker semantics, or authenticate users. Each omission reduces security or schedule risk while leaving a useful delivery readiness product.
-
