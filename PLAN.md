@@ -69,6 +69,8 @@ Recommended feature worktrees after Task 1 establishes the baseline:
 
 The local exercise may merge feature branches locally because no GitHub remote is configured. Each feature branch still preserves worktree-oriented commit boundaries and subagent attribution.
 
+If an isolated validation harness cannot load Superpowers skills, the worker must continue with direct strict RED-GREEN-REFACTOR TDD and the deviation must be recorded in `SPEC_PROCESS.md`.
+
 ## 3. Task Checklist
 
 ### Task 1: Runtime, Database, And Built-In Template

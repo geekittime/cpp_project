@@ -54,3 +54,12 @@
 - **Human intervention:** None. The documents were revised to enumerate ten built-in items and move files to their first behavior-owning tasks.
 - **Deviation:** The successful pressure test used the same agent type as the primary session. A strict different-agent retry remains necessary when Claude Code provider quota is restored.
 - **Lesson:** If a worker asks whether to create an empty module, the plan has probably assigned the file too early.
+
+## 2026-05-31T01:15:00+08:00 - Cold-Start Specification Validation Round 2
+
+- **Task:** `COLDSTART-02`
+- **Skills:** `test-driven-development`
+- **Context:** A second fresh non-persistent fallback worker retried Task 1 using only the revised `SPEC.md` and `PLAN.md`.
+- **Key output:** It requested canonical titles and descriptions for all built-in items and asked how to proceed when Superpowers skills were absent from the isolated CLI.
+- **Human intervention:** None. The specification now fixes user-facing seed copy and the plan instructs isolated validation workers to use direct strict TDD when skill loading is unavailable.
+- **Lesson:** Exact seed fixtures belong in the specification when later UI and tests expose their text.

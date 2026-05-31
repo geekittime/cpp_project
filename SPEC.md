@@ -102,18 +102,18 @@ Supported automated rules:
 
 The built-in `AI4SE Final Project` template contains these ordered items:
 
-| Key | Kind | Severity | Rule Or Evidence Expectation |
-| --- | --- | --- | --- |
-| `readme` | `automated` | `blocking` | `{ "type": "file_exists", "path": "README.md" }` |
-| `docker` | `automated` | `blocking` | `{ "type": "file_any_exists", "paths": ["Dockerfile", "docker-compose.yml"] }` |
-| `ci-workflow` | `automated` | `blocking` | `{ "type": "directory_exists", "path": ".github/workflows" }` |
-| `repository-description` | `automated` | `advisory` | `{ "type": "repository_has_description" }` |
-| `spec-document` | `manual` | `blocking` | Evidence that `SPEC.md` was reviewed. |
-| `plan-document` | `manual` | `blocking` | Evidence that `PLAN.md` was reviewed. |
-| `cold-start-validation` | `manual` | `blocking` | Evidence of the isolated second-agent validation. |
-| `agent-log` | `manual` | `blocking` | Evidence that `AGENT_LOG.md` records the workflow. |
-| `public-image` | `manual` | `blocking` | Public Docker Hub or GHCR image URL. |
-| `reflection` | `manual` | `advisory` | Evidence that the student-authored reflection is present. |
+| Key | Title | Description | Kind | Severity | Rule Or Evidence Expectation |
+| --- | --- | --- | --- | --- | --- |
+| `readme` | `README documentation` | `Repository contains README.md with delivery instructions.` | `automated` | `blocking` | `{ "type": "file_exists", "path": "README.md" }` |
+| `docker` | `Container definition` | `Repository contains Dockerfile or docker-compose.yml.` | `automated` | `blocking` | `{ "type": "file_any_exists", "paths": ["Dockerfile", "docker-compose.yml"] }` |
+| `ci-workflow` | `Continuous integration workflow` | `Repository contains at least one GitHub Actions workflow.` | `automated` | `blocking` | `{ "type": "directory_exists", "path": ".github/workflows" }` |
+| `repository-description` | `Repository description` | `GitHub repository metadata includes a short description.` | `automated` | `advisory` | `{ "type": "repository_has_description" }` |
+| `spec-document` | `Reviewed product specification` | `Provide evidence that SPEC.md was reviewed before implementation.` | `manual` | `blocking` | Evidence that `SPEC.md` was reviewed. |
+| `plan-document` | `Reviewed implementation plan` | `Provide evidence that PLAN.md was reviewed before implementation.` | `manual` | `blocking` | Evidence that `PLAN.md` was reviewed. |
+| `cold-start-validation` | `Cold-start validation` | `Provide evidence from an isolated second-agent specification trial.` | `manual` | `blocking` | Evidence of the isolated second-agent validation. |
+| `agent-log` | `Agent workflow log` | `Provide evidence that AGENT_LOG.md records the development workflow.` | `manual` | `blocking` | Evidence that `AGENT_LOG.md` records the workflow. |
+| `public-image` | `Public container image` | `Provide a public Docker Hub or GHCR image URL.` | `manual` | `blocking` | Public Docker Hub or GHCR image URL. |
+| `reflection` | `Student reflection` | `Provide evidence that the student-authored reflection is present.` | `manual` | `advisory` | Evidence that the student-authored reflection is present. |
 
 **Behavior:** Ship one protected built-in template named `AI4SE Final Project`. A built-in template may be read or copied, but not edited or deleted. Custom templates may be created by copying an existing template, edited, and deleted when no project references them.
 

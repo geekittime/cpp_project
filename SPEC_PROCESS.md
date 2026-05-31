@@ -79,10 +79,17 @@ The fallback worker stopped before editing and asked:
 1. What exact ordered checklist items should seed `AI4SE Final Project`?
 2. Should `src/config.js` and `src/domain/errors.js` be created as empty/minimal modules in Task 1, or deferred until behavior requires them?
 
+After those fixes, a second fresh fallback worker stopped again and asked:
+
+1. What exact `title` and `description` strings should be seeded for each built-in checklist item?
+2. Should it proceed with direct strict TDD because the isolated CLI did not load the named Superpowers skills?
+
 ### Defects Exposed
 
 - `SPEC.md` described valid checklist item shapes but failed to enumerate the protected built-in template.
 - `PLAN.md` listed two files too early, inviting empty placeholder modules and inconsistent agent interpretations.
+- The built-in checklist still allowed inconsistent user-facing copy between implementations.
+- The isolated fallback harness needed an explicit rule for direct TDD when its skill loader did not expose Superpowers.
 
 ### Key Revision Diff
 
@@ -99,6 +106,9 @@ The fallback worker stopped before editing and asked:
 
 + Task 2 creates src/domain/errors.js when domain validation first needs it.
 + Task 9 creates src/config.js when server environment parsing is tested.
++
++ Each built-in item now has an exact title and description.
++ Isolated fallback workers use direct strict TDD if Superpowers skills cannot load.
 ```
 
 The revised documents remove both ambiguities. A later submission still needs one successful fresh Claude Code, Cursor, Gemini CLI, OpenCode, or Qwen Code implementation run after provider quota is available.
