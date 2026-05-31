@@ -4,22 +4,25 @@ function result(status, detail) {
   return { status, detail };
 }
 
-function evaluateRule(rule, { metadata = {}, paths = new Set() } = {}) {
+function evaluateRule(rule, { metadata = {}, tree = [] } = {}) {
   switch (rule.type) {
     case 'file_exists':
-      return paths.has(rule.path)
+      return tree.some((entry) => (
+        entry.type === 'blob' && entry.path === rule.path
+      ))
         ? result('passed', `${rule.path} was found.`)
         : result('failed', `${rule.path} was not found.`);
     case 'file_any_exists': {
-      const foundPath = rule.paths.find((path) => paths.has(path));
+      const foundPath = rule.paths.find((path) => tree.some((entry) => (
+        entry.type === 'blob' && entry.path === path
+      )));
       return foundPath === undefined
         ? result('failed', `None of ${rule.paths.join(', ')} were found.`)
         : result('passed', `${foundPath} was found.`);
     }
     case 'directory_exists': {
-      const prefix = `${rule.path}/`;
-      const found = [...paths].some((path) => (
-        path === rule.path || path.startsWith(prefix)
+      const found = tree.some((entry) => (
+        entry.type === 'tree' && entry.path === rule.path
       ));
       return found
         ? result('passed', `${rule.path} was found.`)

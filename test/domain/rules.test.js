@@ -3,14 +3,15 @@ const test = require('node:test');
 
 const { evaluateRule } = require('../../src/domain/rules');
 
-test('evaluates all supported automated rules against metadata and tree paths', () => {
+test('evaluates all supported automated rules against metadata and tree entries', () => {
   const snapshot = {
     metadata: { description: 'A delivery readiness dashboard.' },
-    paths: new Set([
-      'README.md',
-      'docker-compose.yml',
-      '.github/workflows/test.yml',
-    ]),
+    tree: [
+      { path: 'README.md', type: 'blob' },
+      { path: 'docker-compose.yml', type: 'blob' },
+      { path: '.github/workflows', type: 'tree' },
+      { path: '.github/workflows/test.yml', type: 'blob' },
+    ],
   };
 
   assert.equal(
@@ -40,7 +41,7 @@ test('evaluates all supported automated rules against metadata and tree paths', 
 test('reports failed rules with useful detail', () => {
   const snapshot = {
     metadata: { description: '  ' },
-    paths: new Set(),
+    tree: [],
   };
 
   assert.deepEqual(
@@ -76,5 +77,35 @@ test('reports failed rules with useful detail', () => {
       status: 'failed',
       detail: 'Repository description is missing.',
     },
+  );
+});
+
+test('uses Git tree entry types to distinguish files from directories', () => {
+  const snapshot = {
+    metadata: {},
+    tree: [
+      { path: 'README.md', type: 'tree' },
+      { path: 'Dockerfile', type: 'tree' },
+      { path: '.github/workflows', type: 'blob' },
+    ],
+  };
+
+  assert.equal(
+    evaluateRule({ type: 'file_exists', path: 'README.md' }, snapshot).status,
+    'failed',
+  );
+  assert.equal(
+    evaluateRule({
+      type: 'file_any_exists',
+      paths: ['Dockerfile', 'docker-compose.yml'],
+    }, snapshot).status,
+    'failed',
+  );
+  assert.equal(
+    evaluateRule({
+      type: 'directory_exists',
+      path: '.github/workflows',
+    }, snapshot).status,
+    'failed',
   );
 });

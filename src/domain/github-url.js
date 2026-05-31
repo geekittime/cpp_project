@@ -11,6 +11,13 @@ function normalizeGitHubUrl(value) {
   if (typeof value !== 'string' || value.trim() === '') {
     throw invalidGitHubUrl();
   }
+  if (
+    value.includes('?')
+    || value.includes('#')
+    || /\/\.{1,2}(?:\/|$)/.test(value)
+  ) {
+    throw invalidGitHubUrl();
+  }
 
   let url;
   try {

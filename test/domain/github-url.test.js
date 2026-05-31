@@ -25,7 +25,11 @@ test('rejects malformed or unsupported repository URLs', () => {
     'https://www.github.com/obra/superpowers',
     'https://github.com/obra/superpowers/issues',
     'https://github.com/obra/superpowers?tab=readme',
+    'https://github.com/obra/superpowers?',
     'https://github.com/obra/superpowers#readme',
+    'https://github.com/obra/superpowers#',
+    'https://github.com/obra/superpowers/.',
+    'https://github.com/obra/other/../superpowers',
   ];
 
   for (const url of invalidUrls) {
