@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "test": "node --test --test-concurrency=1",
-    "test:coverage": "node --test --test-concurrency=1 --experimental-test-coverage"
+    "test": "node --test --test-concurrency=1 \"test/**/*.test.js\"",
+    "test:coverage": "node --test --test-concurrency=1 --experimental-test-coverage \"test/**/*.test.js\""
   }
 }

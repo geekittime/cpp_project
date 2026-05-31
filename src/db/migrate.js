@@ -87,74 +87,76 @@ const BUILT_IN_TEMPLATE_ITEMS = [
 ];
 
 function migrateDatabase(db) {
-  db.exec(`
-    PRAGMA foreign_keys = ON;
-
-    CREATE TABLE IF NOT EXISTS templates (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL CHECK (length(trim(name)) > 0),
-      is_builtin INTEGER NOT NULL CHECK (is_builtin IN (0, 1)),
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS template_items (
-      id TEXT PRIMARY KEY,
-      template_id TEXT NOT NULL REFERENCES templates(id) ON DELETE CASCADE,
-      item_key TEXT NOT NULL,
-      title TEXT NOT NULL CHECK (length(trim(title)) > 0),
-      description TEXT NOT NULL CHECK (length(trim(description)) > 0),
-      kind TEXT NOT NULL CHECK (kind IN ('automated', 'manual')),
-      severity TEXT NOT NULL CHECK (severity IN ('blocking', 'advisory')),
-      rule_json TEXT,
-      position INTEGER NOT NULL CHECK (position >= 0),
-      UNIQUE (template_id, item_key)
-    );
-
-    CREATE TABLE IF NOT EXISTS projects (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL CHECK (length(trim(name)) > 0),
-      repo_url TEXT NOT NULL,
-      repo_owner TEXT NOT NULL CHECK (length(repo_owner) > 0),
-      repo_name TEXT NOT NULL CHECK (length(repo_name) > 0),
-      template_id TEXT NOT NULL REFERENCES templates(id),
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS evidence (
-      id TEXT PRIMARY KEY,
-      project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
-      item_key TEXT NOT NULL,
-      text TEXT NOT NULL,
-      url TEXT,
-      completed INTEGER NOT NULL CHECK (completed IN (0, 1)),
-      updated_at TEXT NOT NULL,
-      UNIQUE (project_id, item_key)
-    );
-
-    CREATE TABLE IF NOT EXISTS reports (
-      id TEXT PRIMARY KEY,
-      project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
-      status TEXT NOT NULL CHECK (status IN ('ready', 'blocked')),
-      score INTEGER NOT NULL CHECK (score BETWEEN 0 AND 100),
-      snapshot_json TEXT NOT NULL,
-      created_at TEXT NOT NULL
-    );
-  `);
-
-  const now = new Date().toISOString();
-
+  db.exec('PRAGMA foreign_keys = ON');
   db.exec('BEGIN');
   try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS templates (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL CHECK (length(trim(name)) > 0),
+        is_builtin INTEGER NOT NULL CHECK (is_builtin IN (0, 1)),
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS template_items (
+        id TEXT PRIMARY KEY,
+        template_id TEXT NOT NULL REFERENCES templates(id) ON DELETE CASCADE,
+        item_key TEXT NOT NULL,
+        title TEXT NOT NULL CHECK (length(trim(title)) > 0),
+        description TEXT NOT NULL CHECK (length(trim(description)) > 0),
+        kind TEXT NOT NULL CHECK (kind IN ('automated', 'manual')),
+        severity TEXT NOT NULL CHECK (severity IN ('blocking', 'advisory')),
+        rule_json TEXT,
+        position INTEGER NOT NULL CHECK (position >= 0),
+        UNIQUE (template_id, item_key)
+      );
+
+      CREATE TABLE IF NOT EXISTS projects (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL CHECK (length(trim(name)) > 0),
+        repo_url TEXT NOT NULL,
+        repo_owner TEXT NOT NULL CHECK (length(repo_owner) > 0),
+        repo_name TEXT NOT NULL CHECK (length(repo_name) > 0),
+        template_id TEXT NOT NULL REFERENCES templates(id),
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS evidence (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        item_key TEXT NOT NULL,
+        text TEXT NOT NULL,
+        url TEXT,
+        completed INTEGER NOT NULL CHECK (completed IN (0, 1)),
+        updated_at TEXT NOT NULL,
+        UNIQUE (project_id, item_key)
+      );
+
+      CREATE TABLE IF NOT EXISTS reports (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        status TEXT NOT NULL CHECK (status IN ('ready', 'blocked')),
+        score INTEGER NOT NULL CHECK (score BETWEEN 0 AND 100),
+        snapshot_json TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
+    `);
+
+    const now = new Date().toISOString();
     db.prepare(`
-      INSERT OR IGNORE INTO templates (
+      INSERT INTO templates (
         id, name, is_builtin, created_at, updated_at
       ) VALUES (?, ?, 1, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        name = excluded.name,
+        is_builtin = 1,
+        updated_at = excluded.updated_at
     `).run(BUILT_IN_TEMPLATE_ID, 'AI4SE Final Project', now, now);
 
     const insertItem = db.prepare(`
-      INSERT OR IGNORE INTO template_items (
+      INSERT INTO template_items (
         id,
         template_id,
         item_key,
@@ -165,6 +167,15 @@ function migrateDatabase(db) {
         rule_json,
         position
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        template_id = excluded.template_id,
+        item_key = excluded.item_key,
+        title = excluded.title,
+        description = excluded.description,
+        kind = excluded.kind,
+        severity = excluded.severity,
+        rule_json = excluded.rule_json,
+        position = excluded.position
     `);
 
     BUILT_IN_TEMPLATE_ITEMS.forEach((item, position) => {
@@ -181,6 +192,14 @@ function migrateDatabase(db) {
       );
     });
 
+    const itemKeys = BUILT_IN_TEMPLATE_ITEMS.map(({ key }) => key);
+    db.prepare(`
+      DELETE FROM template_items
+      WHERE template_id = ?
+        AND item_key NOT IN (${itemKeys.map(() => '?').join(', ')})
+    `).run(BUILT_IN_TEMPLATE_ID, ...itemKeys);
+
+    db.exec('PRAGMA user_version = 1');
     db.exec('COMMIT');
   } catch (error) {
     db.exec('ROLLBACK');
