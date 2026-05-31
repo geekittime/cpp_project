@@ -85,17 +85,17 @@ If an isolated validation harness cannot load Superpowers skills, the worker mus
 - Create: `test/helpers/database.js`
 - Test: `test/db/migrate.test.js`
 
-- [ ] **Step 1: Add the failing migration test**
+- [x] **Step 1: Add the failing migration test** (`9442013`)
 
 Create `test/db/migrate.test.js` that opens an in-memory database, calls `migrateDatabase(db)`, and asserts that `templates`, `template_items`, `projects`, `evidence`, and `reports` exist and that exactly one built-in template named `AI4SE Final Project` is seeded.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`9442013`)
 
 Run: `npm test -- test/db/migrate.test.js`
 
 Expected: FAIL because `src/db/migrate.js` does not exist.
 
-- [ ] **Step 3: Implement the minimal migration**
+- [x] **Step 3: Implement the minimal migration** (`9442013`, hardened in `5c0ea21`)
 
 Add `package.json` scripts:
 
@@ -111,13 +111,13 @@ Add `package.json` scripts:
 
 Use `DatabaseSync` from `node:sqlite`, enable foreign keys, create the five tables from `SPEC.md`, and seed the protected AI4SE checklist with the exact ten ordered items enumerated in `SPEC.md` section 5.2.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN** (`9442013`, reviewed in `5c0ea21`)
 
 Run: `npm test -- test/db/migrate.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (`9442013`)
 
 ```bash
 git add package.json src test/helpers test/db

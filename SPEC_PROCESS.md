@@ -113,6 +113,20 @@ After those fixes, a second fresh fallback worker stopped again and asked:
 
 The revised documents remove both ambiguities. A later submission still needs one successful fresh Claude Code, Cursor, Gemini CLI, OpenCode, or Qwen Code implementation run after provider quota is available.
 
+### Successful Fallback Trial
+
+After the second revision, a third fresh non-persistent fallback worker found no unanswered questions and implemented Task 1 using direct strict TDD:
+
+```text
+RED: Cannot find module '../../src/db/migrate'
+GREEN: targeted test passed, full npm test passed
+commit: 944201316116200f8b64dbbeca7df8f6b04430a4
+```
+
+The primary session then performed the required two-stage review. Spec compliance passed. Code quality review found that schema DDL occurred outside the seed transaction and that `INSERT OR IGNORE` silently preserved drifted built-in rows. Tests were added first to reproduce both issues, then commit `5c0ea21` made schema initialization transactional, replaced ignores with canonical upserts, removed obsolete seed items, and recorded `PRAGMA user_version = 1`.
+
+The fallback implementation proves that the revised documents are executable without hidden conversational context. The strict rubric deviation remains: the successful fallback worker was Codex CLI because the available Claude Code provider had no quota.
+
 ## Reflection On Brainstorming
 
 The strongest part of Superpowers brainstorming is its implementation gate. It forced product scope, error handling, and runtime constraints to be decided before scaffolding. The awkward part is that its ideal question-by-question rhythm can become ceremonial when the human explicitly delegates low-risk choices. In this project, delegated decisions are recorded with reasons instead of prompting for approval on every small option.

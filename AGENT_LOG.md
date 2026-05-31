@@ -63,3 +63,14 @@
 - **Key output:** It requested canonical titles and descriptions for all built-in items and asked how to proceed when Superpowers skills were absent from the isolated CLI.
 - **Human intervention:** None. The specification now fixes user-facing seed copy and the plan instructs isolated validation workers to use direct strict TDD when skill loading is unavailable.
 - **Lesson:** Exact seed fixtures belong in the specification when later UI and tests expose their text.
+
+## 2026-05-31T01:30:00+08:00 - Cold-Start Task 1 Trial
+
+- **Task:** `TASK-01`
+- **Skills:** `using-git-worktrees`, `test-driven-development`, `requesting-code-review`
+- **Context:** A third fresh non-persistent Codex CLI fallback worker read only `SPEC.md` and `PLAN.md`, implemented Task 1, and committed `9442013`.
+- **RED evidence:** `Cannot find module '../../src/db/migrate'`.
+- **GREEN evidence:** Targeted migration test passed, then the full suite passed.
+- **Review:** Spec compliance approved. Code quality review requested transactional DDL, canonical seed repair, full fixture assertions, narrow test discovery, and a migration version marker.
+- **Human intervention:** Added failing rollback and drift tests, then fixed migration behavior in `5c0ea21`. Merged the reviewed branch into `main` with `43af5fd`.
+- **Lesson:** Two-stage review caught recovery bugs that a happy-path baseline could not expose. Immutable built-in fixtures need repair semantics, not silent ignore semantics.
