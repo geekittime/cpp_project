@@ -21,6 +21,7 @@ function serializeTemplate(row, items) {
     id: row.id,
     name: row.name,
     is_builtin: Boolean(row.is_builtin),
+    item_count: items.length,
     created_at: row.created_at,
     updated_at: row.updated_at,
     items,

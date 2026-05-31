@@ -136,6 +136,7 @@ function createTemplateRouter({ templateRepository }) {
 
   router.put('/:id', (request, response, next) => {
     try {
+      templateRepository.assertEditable(request.params.id);
       response.json({
         template: templateRepository.update(
           request.params.id,

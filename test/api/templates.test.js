@@ -56,6 +56,7 @@ test('lists the built-in template summary and fetches its ordered items', async 
     const fetched = await app.request(`/api/templates/${builtInId}`);
     assert.equal(fetched.response.status, 200);
     assert.equal(fetched.body.template.id, builtInId);
+    assert.equal(fetched.body.template.item_count, 10);
     assert.equal(fetched.body.template.items.length, 10);
     assert.deepEqual(
       fetched.body.template.items.slice(0, 2).map(({ key, position }) => ({
@@ -83,6 +84,7 @@ test('copies the built-in template, edits the custom copy, and deletes it while 
     assert.equal(copied.response.status, 201);
     assert.equal(copied.body.template.name, 'Release checklist');
     assert.equal(copied.body.template.is_builtin, false);
+    assert.equal(copied.body.template.item_count, 10);
     assert.equal(copied.body.template.items.length, 10);
 
     const id = copied.body.template.id;
@@ -95,6 +97,7 @@ test('copies the built-in template, edits the custom copy, and deletes it while 
     });
     assert.equal(edited.response.status, 200);
     assert.equal(edited.body.template.name, 'Lean release checklist');
+    assert.equal(edited.body.template.item_count, 2);
     assert.deepEqual(edited.body.template.items, customItems().map((item, position) => ({
       ...item,
       position,
@@ -125,6 +128,32 @@ test('rejects mutation of the protected built-in template', async () => {
     );
     assertError(
       await app.request(`/api/templates/${builtInId}`, { method: 'DELETE' }),
+      409,
+      'builtin_template_protected',
+    );
+  } finally {
+    await app.close();
+  }
+});
+
+test('checks PUT template identity before validating the payload', async () => {
+  const app = await createTestApp();
+
+  try {
+    const invalidPayload = { name: 'Invalid', items: [] };
+    assertError(
+      await app.request('/api/templates/missing', {
+        method: 'PUT',
+        body: invalidPayload,
+      }),
+      404,
+      'template_not_found',
+    );
+    assertError(
+      await app.request(`/api/templates/${builtInId}`, {
+        method: 'PUT',
+        body: invalidPayload,
+      }),
       409,
       'builtin_template_protected',
     );
@@ -197,6 +226,61 @@ test('returns stable errors for unknown templates and invalid edits', async () =
       400,
       'invalid_template',
     );
+  } finally {
+    await app.close();
+  }
+});
+
+test('rejects invalid checklist item combinations', async () => {
+  const app = await createTestApp();
+
+  try {
+    const copied = await app.request(`/api/templates/${builtInId}/copy`, {
+      method: 'POST',
+      body: { name: 'Validation target' },
+    });
+    const templateId = copied.body.template.id;
+    const invalidCases = [
+      {
+        name: 'empty templates',
+        items: [],
+      },
+      {
+        name: 'unsupported rule types',
+        items: [{
+          ...customItems()[0],
+          rule: { type: 'shell_command', command: 'test -f README.md' },
+        }],
+      },
+      {
+        name: 'automated items without rules',
+        items: [{
+          ...customItems()[0],
+          rule: null,
+        }],
+      },
+      {
+        name: 'manual items with rules',
+        items: [{
+          ...customItems()[1],
+          rule: { type: 'file_exists', path: 'DEMO.md' },
+        }],
+      },
+    ];
+
+    for (const invalidCase of invalidCases) {
+      assertError(
+        await app.request(`/api/templates/${templateId}`, {
+          method: 'PUT',
+          body: {
+            name: invalidCase.name,
+            items: invalidCase.items,
+          },
+        }),
+        400,
+        'invalid_template',
+      );
+    }
   } finally {
     await app.close();
   }
