@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+data/
+.env
+.worktrees/
+.superpowers/
+npm-debug.log*
+
