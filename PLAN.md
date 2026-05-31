@@ -142,7 +142,7 @@ git commit -m "feat: add SQLite baseline and built-in checklist [subagent: runti
 
 - [ ] **Step 1: Add failing URL tests**
 
-Test normalization of `https://github.com/obra/superpowers.git/` to owner `obra`, repository `superpowers`, and canonical URL `https://github.com/obra/superpowers`. Test rejection of blank names, unsupported hosts, extra path segments, query strings, and fragments.
+Test normalization of `https://github.com/obra/superpowers.git/` to owner `obra`, repository `superpowers`, and canonical URL `https://github.com/obra/superpowers`. Test rejection of blank URLs, unsupported hosts, extra path segments, query strings, and fragments. Project-name validation belongs to Task 4.
 
 - [ ] **Step 2: Verify URL tests RED**
 
@@ -170,7 +170,7 @@ Use metadata and a tree-path set to test all four supported rules. Test score ro
 
 - [ ] **Step 7: Implement rule evaluation and report snapshot creation**
 
-Run: `npm test -- test/domain`
+Run: `npm test`
 
 Expected: PASS.
 
