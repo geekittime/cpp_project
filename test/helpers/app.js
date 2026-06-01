@@ -2,11 +2,15 @@ const { migrateDatabase } = require('../../src/db/migrate');
 const { createApp } = require('../../src/app');
 const { createTestDatabase } = require('./database');
 
-async function createTestApp() {
+async function createTestApp(options = {}) {
   const db = createTestDatabase();
   migrateDatabase(db);
 
-  const server = createApp({ db, logger: { info() {} } }).listen(0);
+  const server = createApp({
+    db,
+    logger: { info() {} },
+    githubClient: options.githubClient ?? null,
+  }).listen(0);
   await new Promise((resolve, reject) => {
     server.once('listening', resolve);
     server.once('error', reject);
@@ -30,6 +34,14 @@ async function createTestApp() {
         headers,
         body,
       });
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return {
+          response,
+          text: await response.text(),
+        };
+      }
 
       return {
         response,
