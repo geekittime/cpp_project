@@ -140,41 +140,41 @@ git commit -m "feat: add SQLite baseline and built-in checklist [subagent: runti
 - Test: `test/domain/rules.test.js`
 - Test: `test/domain/report.test.js`
 
-- [ ] **Step 1: Add failing URL tests**
+- [x] **Step 1: Add failing URL tests** (`6ed392c`)
 
 Test normalization of `https://github.com/obra/superpowers.git/` to owner `obra`, repository `superpowers`, and canonical URL `https://github.com/obra/superpowers`. Test rejection of blank URLs, unsupported hosts, extra path segments, query strings, and fragments. Project-name validation belongs to Task 4.
 
-- [ ] **Step 2: Verify URL tests RED**
+- [x] **Step 2: Verify URL tests RED** (`6ed392c`)
 
 Run: `npm test -- test/domain/github-url.test.js`
 
 Expected: FAIL because `normalizeGitHubUrl` is missing.
 
-- [ ] **Step 3: Implement URL normalization and verify GREEN**
+- [x] **Step 3: Implement URL normalization and verify GREEN** (`6ed392c`)
 
 Parse with `new URL()`, validate the host and segments, remove one `.git` suffix, and throw `AppError.badRequest(...)` for invalid values.
 
-- [ ] **Step 4: Add failing template tests**
+- [x] **Step 4: Add failing template tests** (`6ed392c`)
 
 Test accepted automated and manual items. Test rejection of duplicate keys, unknown rule types, automated items without rules, manual items with rules, and empty item lists.
 
-- [ ] **Step 5: Implement template validation and verify GREEN**
+- [x] **Step 5: Implement template validation and verify GREEN** (`6ed392c`)
 
 Run: `npm test -- test/domain/template.test.js`
 
 Expected: PASS after minimal implementation.
 
-- [ ] **Step 6: Add failing rule and report tests**
+- [x] **Step 6: Add failing rule and report tests** (`6ed392c`)
 
 Use metadata and a tree-path set to test all four supported rules. Test score rounding and `ready` versus `blocked` status, including pending manual items.
 
-- [ ] **Step 7: Implement rule evaluation and report snapshot creation**
+- [x] **Step 7: Implement rule evaluation and report snapshot creation** (`6ed392c`)
 
 Run: `npm test`
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit** (`ac1ee18`, merged in `6ed392c`)
 
 ```bash
 git add src/domain test/domain
@@ -193,7 +193,7 @@ git commit -m "feat: add audit domain rules and scoring [subagent: domain]"
 - Create: `test/helpers/app.js`
 - Test: `test/api/templates.test.js`
 
-- [ ] **Step 1: Add failing template API tests**
+- [x] **Step 1: Add failing template API tests** (`678800d`)
 
 Cover:
 
@@ -207,23 +207,23 @@ DELETE /api/templates/:id
 
 Assert that the built-in template is listed, may be copied, and rejects mutation with `409`. Assert that custom copies accept valid edits and may be deleted while unused.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`678800d`)
 
 Run: `npm test -- test/api/templates.test.js`
 
 Expected: FAIL because app and routes are missing.
 
-- [ ] **Step 3: Implement repository and routes**
+- [x] **Step 3: Implement repository and routes** (`678800d`)
 
 Use prepared SQLite statements. Keep serialization in the repository and convert domain errors to the stable envelope in `src/app.js`.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN** (`678800d`)
 
 Run: `npm test -- test/api/templates.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (`f4ea6dd`, reviewed in `57f8915`, merged in `678800d`)
 
 ```bash
 git add src/app.js src/repositories/template-repository.js src/routes/template-routes.js test/helpers/app.js test/api/templates.test.js
@@ -241,27 +241,27 @@ git commit -m "feat: add editable checklist templates API [subagent: templates]"
 - Test: `test/api/projects.test.js`
 - Modify: `src/app.js`
 
-- [ ] **Step 1: Add failing project API tests**
+- [x] **Step 1: Add failing project API tests** (`ffee762`)
 
 Cover list, create, fetch, update, and delete. Assert canonical URL storage, template linkage, latest report summary placeholder, validation errors, and `404` for unknown IDs.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/api/projects.test.js`
 
 Expected: FAIL because project routes are missing.
 
-- [ ] **Step 3: Implement repository and routes**
+- [x] **Step 3: Implement repository and routes** (`ffee762`)
 
 Normalize repository URLs before persistence. Return ISO timestamps and stable JSON envelopes.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN** (`ffee762`)
 
 Run: `npm test -- test/api/projects.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (`ffee762`)
 
 ```bash
 git add src/app.js src/repositories/project-repository.js src/routes/project-routes.js test/api/projects.test.js
@@ -277,7 +277,7 @@ git commit -m "feat: add project tracking API [subagent: projects]"
 - Create: `src/services/github-client.js`
 - Test: `test/services/github-client.test.js`
 
-- [ ] **Step 1: Add failing client tests**
+- [x] **Step 1: Add failing client tests** (`ffee762`)
 
 Inject a fake `fetch` implementation. Assert:
 
@@ -289,23 +289,23 @@ Inject a fake `fetch` implementation. Assert:
 - an empty repository returns an empty tree with a warning.
 - a truncated tree returns entries plus a warning.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/services/github-client.test.js`
 
 Expected: FAIL because `GitHubClient` is missing.
 
-- [ ] **Step 3: Implement minimal client**
+- [x] **Step 3: Implement minimal client** (`ffee762`)
 
 Expose `getRepositorySnapshot(owner, repo)`. Do not call a shell, clone a repository, or persist tokens.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN** (`ffee762`)
 
 Run: `npm test -- test/services/github-client.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (`ffee762`)
 
 ```bash
 git add src/services/github-client.js test/services/github-client.test.js
@@ -326,21 +326,21 @@ git commit -m "feat: add public GitHub repository client [subagent: github-clien
 - Test: `test/api/reports.test.js`
 - Modify: `src/app.js`
 
-- [ ] **Step 1: Add failing audit service test**
+- [x] **Step 1: Add failing audit service test** (`ffee762`)
 
 Create a project and inject a fake GitHub client returning repository metadata and paths. Assert a stored report snapshot contains per-item results, GitHub metadata, warnings, rounded score, and `blocked` status.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/services/audit-service.test.js`
 
 Expected: FAIL because `AuditService` is missing.
 
-- [ ] **Step 3: Implement report repository and audit orchestration**
+- [x] **Step 3: Implement report repository and audit orchestration** (`ffee762`)
 
 Evaluate rule items, merge pending manual items, call report scoring, save immutable JSON, and return the saved snapshot.
 
-- [ ] **Step 4: Add failing report route tests**
+- [x] **Step 4: Add failing report route tests** (`ffee762`)
 
 Cover:
 
@@ -352,13 +352,13 @@ GET /api/projects/:id/reports/:reportId
 
 Assert upstream error envelopes and report ordering newest first.
 
-- [ ] **Step 5: Implement routes and verify GREEN**
+- [x] **Step 5: Implement routes and verify GREEN** (`ffee762`)
 
 Run: `npm test -- test/services/audit-service.test.js test/api/reports.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (`ffee762`)
 
 ```bash
 git add src/app.js src/repositories src/services/audit-service.js src/routes/report-routes.js test/services/audit-service.test.js test/api/reports.test.js
@@ -377,31 +377,31 @@ git commit -m "feat: generate immutable readiness reports [subagent: audits]"
 - Modify: `src/routes/project-routes.js`
 - Modify: `src/app.js`
 
-- [ ] **Step 1: Add failing evidence tests**
+- [x] **Step 1: Add failing evidence tests** (`ffee762`)
 
 Cover upsert, edit, invalid URL, completed evidence without text, unknown item, and rejection of evidence for automated items. Run a second audit and assert captured manual evidence changes score and remains immutable in the first report.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/api/evidence.test.js`
 
 Expected: FAIL because evidence route is missing.
 
-- [ ] **Step 3: Implement evidence route**
+- [x] **Step 3: Implement evidence route** (`ffee762`)
 
 Validate evidence URLs with `new URL()`, restrict protocols to `http:` and `https:`, and verify item kind against the current template.
 
-- [ ] **Step 4: Add health test and implementation**
+- [x] **Step 4: Add health test and implementation** (`ffee762`)
 
 Assert `GET /api/health` returns `{ "status": "ok" }`.
 
-- [ ] **Step 5: Verify GREEN**
+- [x] **Step 5: Verify GREEN** (`ffee762`)
 
 Run: `npm test -- test/api/evidence.test.js test/api/health.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (`ffee762`)
 
 ```bash
 git add src/app.js src/routes src/repositories/evidence-repository.js test/api/evidence.test.js test/api/health.test.js
@@ -420,17 +420,17 @@ git commit -m "feat: track manual evidence and expose health check [subagent: ev
 - Test: `test/ui/static-assets.test.js`
 - Modify: `src/app.js`
 
-- [ ] **Step 1: Add failing static asset tests**
+- [x] **Step 1: Add failing static asset tests** (`ffee762`)
 
 Assert `/` serves an HTML dashboard with the ShipCheck title, `/styles.css` exposes Linear-inspired tokens, and `/app.js` is served as JavaScript.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/ui/static-assets.test.js`
 
 Expected: FAIL because static assets are missing.
 
-- [ ] **Step 3: Implement dashboard shell**
+- [x] **Step 3: Implement dashboard shell** (`ffee762`)
 
 Build four focused views in browser JavaScript:
 
@@ -441,17 +441,17 @@ Build four focused views in browser JavaScript:
 
 Use Open Design `dashboard` and `linear-app` rules: near-black canvas, restrained indigo accent, semi-transparent borders, dense sidebar layout, visible focus states, responsive collapse, and no decorative gradients.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN** (`ffee762`)
 
 Run: `npm test -- test/ui/static-assets.test.js`
 
 Expected: PASS.
 
-- [ ] **Step 5: Run Open Design self-critique**
+- [x] **Step 5: Run Open Design self-critique** (`ffee762`; findings logged in `AGENT_LOG.md`)
 
 Check hierarchy, contrast, responsive layout, empty states, loading states, validation errors, keyboard focus, and avoidance of generic AI dashboard decoration. Record findings in `AGENT_LOG.md`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (`ffee762`)
 
 ```bash
 git add src/app.js src/public test/ui AGENT_LOG.md
@@ -471,25 +471,25 @@ git commit -m "feat: add Linear-inspired readiness dashboard [subagent: dashboar
 - Test: `test/config.test.js`
 - Test: `test/server.test.js`
 
-- [ ] **Step 1: Add failing configuration tests**
+- [x] **Step 1: Add failing configuration tests** (`ffee762`)
 
 Assert default port `3000`, default database path `data/shipcheck.sqlite`, optional `GITHUB_TOKEN`, and integer validation for `PORT`.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED** (`ffee762`)
 
 Run: `npm test -- test/config.test.js`
 
 Expected: FAIL until config parsing is complete.
 
-- [ ] **Step 3: Implement server entrypoint**
+- [x] **Step 3: Implement server entrypoint** (`ffee762`)
 
 Create the data directory, open the database, migrate it, build the app, listen on configured port, and close cleanly on `SIGINT` and `SIGTERM`.
 
-- [ ] **Step 4: Add Docker and CI configuration**
+- [x] **Step 4: Add Docker and CI configuration** (`ffee762`)
 
 Use Node `24-bookworm-slim`, install production dependencies, expose port `3000`, persist `/app/data`, and run `node src/server.js`. Configure GitHub Actions to run `npm ci`, `npm test`, and `docker build -t shipcheck:test .`.
 
-- [ ] **Step 5: Verify available checks**
+- [x] **Step 5: Verify available checks** (`ffee762`; `npm test` passed locally, Docker build deferred because Docker is unavailable on this workstation)
 
 Run: `npm test`
 
@@ -499,7 +499,7 @@ Run where Docker is available: `docker build -t shipcheck:local .`
 
 Expected: Image builds successfully.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (`ffee762`)
 
 ```bash
 git add src/server.js src/config.js Dockerfile .dockerignore .github test/config.test.js test/server.test.js
@@ -518,19 +518,19 @@ git commit -m "chore: add runnable server Docker image and CI [subagent: deliver
 - Modify: `SPEC_PROCESS.md`
 - Modify: `AGENT_LOG.md`
 
-- [ ] **Step 1: Write README**
+- [x] **Step 1: Write README** (`pending docs commit`)
 
 Document the pitch, features, architecture, Node requirement, local commands, environment variables, test command, Docker commands, API summary, directory structure, GitHub API limits, Open Design attribution, third-party license list, and deployment notes.
 
-- [ ] **Step 2: Update process evidence**
+- [x] **Step 2: Update process evidence** (`pending docs commit`)
 
 Add cold-start findings, key before/after specification diff, task commits, subagent reviews, deviations, and local environment limitations.
 
-- [ ] **Step 3: Create reflection outline**
+- [x] **Step 3: Create reflection outline** (`pending docs commit`)
 
 Create a clearly marked student-authored reflection worksheet. Do not generate the final 1500-2500 Chinese-character reflection because the course explicitly requires the student to write it.
 
-- [ ] **Step 4: Run full verification**
+- [x] **Step 4: Run full verification** (`pending docs commit`)
 
 Run:
 
@@ -548,7 +548,7 @@ GET http://localhost:3000/api/health
 
 Expected: all tests pass and health returns HTTP `200`.
 
-- [ ] **Step 5: Request final two-stage review**
+- [x] **Step 5: Request final two-stage review** (`pending docs commit`)
 
 Review against `SPEC.md`, then review code quality and test gaps. Fix Critical and Important findings.
 

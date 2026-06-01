@@ -74,3 +74,58 @@
 - **Review:** Spec compliance approved. Code quality review requested transactional DDL, canonical seed repair, full fixture assertions, narrow test discovery, and a migration version marker.
 - **Human intervention:** Added failing rollback and drift tests, then fixed migration behavior in `5c0ea21`. Merged the reviewed branch into `main` with `43af5fd`.
 - **Lesson:** Two-stage review caught recovery bugs that a happy-path baseline could not expose. Immutable built-in fixtures need repair semantics, not silent ignore semantics.
+
+## 2026-05-31T02:10:00+08:00 - Template API Merge
+
+- **Task:** `TASK-03`
+- **Skills:** `test-driven-development`, `requesting-code-review`
+- **Context:** Implemented template persistence and routes in an isolated worktree, then reviewed payload shape and validation ordering.
+- **Key output:** `f4ea6dd` introduced the API, `57f8915` fixed review findings, and `678800d` merged the branch.
+- **Human intervention:** Tightened route behavior so identity checks happen before invalid payload validation where the spec required it.
+- **Lesson:** API tests are especially good at catching order-of-operations mistakes that look harmless in local code.
+
+## 2026-05-31T02:45:00+08:00 - Domain Rules Merge
+
+- **Task:** `TASK-02`
+- **Skills:** `test-driven-development`, `requesting-code-review`
+- **Context:** Built URL normalization, template validation, automated rule evaluation, and report scoring in a dedicated worktree.
+- **Key output:** `ac1ee18` implemented the domain layer, `4008acc` hardened GitHub URL parsing and typed audit rules, and `6ed392c` merged the reviewed branch.
+- **Human intervention:** Updated `PLAN.md` in `ad2631c` after review revealed one misleading validation note.
+- **Lesson:** The domain layer became the easiest place to keep product rules explicit instead of burying them in HTTP handlers.
+
+## 2026-06-01T09:30:00+08:00 - Runtime Completion
+
+- **Task:** `TASK-04` to `TASK-09`
+- **Skills:** `test-driven-development`, `requesting-code-review`, `systematic-debugging`
+- **Context:** Completed projects, GitHub client behavior, immutable reports, manual evidence, health endpoint, dashboard assets, runtime config, server startup, Docker, and CI.
+- **Key output:** Local commit `ffee762` added 27 files and finalized the runnable application.
+- **Prompt strategy:** Keep each capability observable through either an HTTP integration test or a focused unit test before adding implementation.
+- **Human intervention:** Fixed one cross-platform config mismatch when `DATABASE_PATH` defaulted to backslashes on Windows instead of the forward-slash path promised in the spec.
+- **Lesson:** The built-in test runner plus ephemeral SQLite databases were enough to keep the app honest without adding another framework.
+
+## 2026-06-01T09:45:00+08:00 - Dashboard Self-Critique
+
+- **Task:** `TASK-08-REVIEW`
+- **Skills:** `requesting-code-review`
+- **Context:** Reviewed the static dashboard against the Open Design `dashboard` and `linear-app` cues named in the spec.
+- **Findings:** Hierarchy, focus states, contrast, loading states, empty states, and responsive collapse are present. The template editor is intentionally utilitarian and exposes raw JSON instead of a richer visual builder.
+- **Human intervention:** Kept the JSON editor because it preserves scope and still demonstrates editable templates without a second wave of frontend complexity.
+- **Lesson:** A plain but coherent interface is better evidence than an overbuilt UI with weak behavior underneath.
+
+## 2026-06-01T09:55:00+08:00 - Final Verification
+
+- **Task:** `TASK-10`
+- **Skills:** `requesting-code-review`
+- **Context:** Ran `npm test`, `npm run test:coverage`, and `npm start`, then requested `GET /api/health`.
+- **Key output:** `40` tests passed, overall coverage reached `92.76%` lines, and the live health check returned `{"status":"ok"}`.
+- **Review summary:** No critical defects remained. Residual risk is external: no Docker binary in the workstation, no GitHub remote, and no container registry credentials.
+- **Lesson:** By the end, the remaining gaps were delivery-channel constraints rather than missing local software behavior.
+
+## 2026-06-01T10:00:00+08:00 - External Limitations
+
+- **Task:** `DELIVERY-EXTERNAL`
+- **Skills:** `finishing-a-development-branch`
+- **Context:** Compared the local workspace against the course deliverable checklist.
+- **Blocked items:** public GitHub PR history, public Docker Hub or GHCR image URL, and optional public deployment URL.
+- **Reason:** This workspace has no configured GitHub remote, no registry credentials, and no cloud deployment account secrets.
+- **Lesson:** Agentic workflows can fully prepare local artifacts, but public publication still depends on human-controlled infrastructure access.
