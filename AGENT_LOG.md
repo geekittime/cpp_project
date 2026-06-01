@@ -129,3 +129,12 @@
 - **Blocked items:** public GitHub PR history, public Docker Hub or GHCR image URL, and optional public deployment URL.
 - **Reason:** This workspace has no configured GitHub remote, no registry credentials, and no cloud deployment account secrets.
 - **Lesson:** Agentic workflows can fully prepare local artifacts, but public publication still depends on human-controlled infrastructure access.
+
+## 2026-06-01T10:10:00+08:00 - Different-Agent Retry
+
+- **Task:** `COLDSTART-RETRY`
+- **Skills:** `finishing-a-development-branch`
+- **Context:** Retried a minimal non-interactive Claude Code invocation to see whether the earlier different-agent cold-start requirement could be completed after the rest of the project stabilized.
+- **Key output:** `claude --version` returned `2.1.91`, but a non-interactive `claude -p` probe did not complete within the local timeout window.
+- **Human intervention:** Recorded the retry result instead of overstating compliance.
+- **Lesson:** Tool availability and successful provider execution are separate things; the rubric gap remains external, not hidden.
