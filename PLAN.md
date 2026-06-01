@@ -518,19 +518,19 @@ git commit -m "chore: add runnable server Docker image and CI [subagent: deliver
 - Modify: `SPEC_PROCESS.md`
 - Modify: `AGENT_LOG.md`
 
-- [x] **Step 1: Write README** (`pending docs commit`)
+- [x] **Step 1: Write README** (`6d8bae9`)
 
 Document the pitch, features, architecture, Node requirement, local commands, environment variables, test command, Docker commands, API summary, directory structure, GitHub API limits, Open Design attribution, third-party license list, and deployment notes.
 
-- [x] **Step 2: Update process evidence** (`pending docs commit`)
+- [x] **Step 2: Update process evidence** (`6d8bae9`)
 
 Add cold-start findings, key before/after specification diff, task commits, subagent reviews, deviations, and local environment limitations.
 
-- [x] **Step 3: Create reflection outline** (`pending docs commit`)
+- [x] **Step 3: Create reflection outline** (`6d8bae9`)
 
 Create a clearly marked student-authored reflection worksheet. Do not generate the final 1500-2500 Chinese-character reflection because the course explicitly requires the student to write it.
 
-- [x] **Step 4: Run full verification** (`pending docs commit`)
+- [x] **Step 4: Run full verification** (`6d8bae9`)
 
 Run:
 
@@ -548,11 +548,11 @@ GET http://localhost:3000/api/health
 
 Expected: all tests pass and health returns HTTP `200`.
 
-- [x] **Step 5: Request final two-stage review** (`pending docs commit`)
+- [x] **Step 5: Request final two-stage review** (`6d8bae9`)
 
 Review against `SPEC.md`, then review code quality and test gaps. Fix Critical and Important findings.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (`6d8bae9`)
 
 ```bash
 git add README.md REFLECTION.md PLAN.md SPEC_PROCESS.md AGENT_LOG.md
