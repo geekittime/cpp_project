@@ -185,3 +185,9 @@ No critical defects remained after the final test pass. Residual risks are exter
 ## What This Process Showed
 
 The most useful part of the method was not any single generated file. It was the forced transition from vague intent to explicit acceptance criteria, then from acceptance criteria to auditable tests and commits. The weakest part, in practice, is that final delivery requirements depending on external infrastructure still need human accounts, permissions, and manual follow-through. AI can prepare those steps cleanly, but it cannot manufacture credentials or public history on its own.
+
+## Remote Publication Follow-Up
+
+On 2026-06-09, the local repository was successfully published to the public repository `https://github.com/geekittime/cpp_project`. The final project state was pushed to remote `main`, and review branches were preserved so the implementation stages remain inspectable.
+
+An additional attempt was made to turn those branches into GitHub pull requests through the installed GitHub integration. Branch push worked, but PR creation failed consistently with `403 Resource not accessible by integration`. This means the repository now has a public commit and branch history, but not a complete PR history generated through automation. The gap is permission-related rather than missing source artifacts.

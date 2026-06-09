@@ -138,3 +138,21 @@
 - **Key output:** `claude --version` returned `2.1.91`, but a non-interactive `claude -p` probe did not complete within the local timeout window.
 - **Human intervention:** Recorded the retry result instead of overstating compliance.
 - **Lesson:** Tool availability and successful provider execution are separate things; the rubric gap remains external, not hidden.
+
+## 2026-06-09T10:20:00+08:00 - Remote Publication
+
+- **Task:** `DELIVERY-REMOTE`
+- **Skills:** `finishing-a-development-branch`
+- **Context:** Checked GitHub connectivity again and found an authenticated user profile plus multiple owned public repositories, including the empty repository `geekittime/cpp_project`.
+- **Key output:** Published the local git history to `https://github.com/geekittime/cpp_project` and preserved review branches: `archive/task1-baseline`, `feature/template-api`, `feature/domain-rules`, `feature/runtime-dashboard`, and `docs/delivery-evidence`.
+- **Human intervention:** Promoted the final project state to remote `main` after first preserving the Task 1 baseline on its own archival branch.
+- **Lesson:** Even when local implementation is finished, packaging the history for external review is a separate engineering task.
+
+## 2026-06-09T10:30:00+08:00 - PR Creation Limitation
+
+- **Task:** `DELIVERY-PRS`
+- **Skills:** `finishing-a-development-branch`
+- **Context:** Attempted to create GitHub pull requests through the installed GitHub integration after pushing feature branches.
+- **Key output:** Every PR creation attempt failed with `403 Resource not accessible by integration`.
+- **Human intervention:** Kept the pushed review branches and documented the exact permission failure instead of fabricating PR evidence.
+- **Lesson:** Published branches can be automated with local git credentials, but PR creation still depends on the permission scope of the installed GitHub integration or a separate authenticated CLI.

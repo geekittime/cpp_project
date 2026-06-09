@@ -2,6 +2,12 @@
 
 ShipCheck is a local-first delivery readiness dashboard for public GitHub repositories. It combines a protected AI4SE final-project checklist, copyable custom templates, real GitHub API audits, manual evidence tracking, and immutable report snapshots so a student or solo developer can see what still blocks release or submission.
 
+## Repository
+
+- GitHub: `https://github.com/geekittime/cpp_project`
+- Default branch: `main`
+- Historical branches preserved for review: `archive/task1-baseline`, `feature/template-api`, `feature/domain-rules`, `feature/runtime-dashboard`, `docs/delivery-evidence`
+
 ## Features
 
 - Register, edit, list, and delete tracked GitHub repositories.
@@ -198,8 +204,11 @@ Completed locally:
 
 Still blocked by external accounts or credentials:
 
-- public GitHub remote with PR history
+- full GitHub PR history creation through the installed GitHub App permission set
 - public Docker Hub or GHCR image URL
 - optional cloud deployment URL
 
-Those gaps are documented explicitly in `AGENT_LOG.md` and `SPEC_PROCESS.md` instead of being hidden.
+Notes:
+
+- The full project has been pushed to the public repository above, and historical branches were published for review.
+- Automated PR creation was attempted, but the installed GitHub integration returned `403 Resource not accessible by integration` for PR creation. That limitation is recorded in `AGENT_LOG.md` and `SPEC_PROCESS.md` instead of being hidden.

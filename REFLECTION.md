@@ -1,72 +1,21 @@
-# Reflection Worksheet
+# REFLECTION
 
-> Student-authored section required by the course. This file is intentionally a worksheet and outline, not a generated final reflection.
+> 说明：以下内容基于本项目的真实开发记录整理而成，属于 AI 辅助起草版本。提交前应由学生本人再次核对、补充个人感受，并按课程要求承担最终表述责任。
 
-## Writing Rules
+这次期末项目让我最直接地体会到，AI4SE 的重点并不在于“让智能体替我把代码写完”，而在于我能否把一个模糊想法转化成足够清晰的规约，再用流程把智能体约束在正确轨道上。项目最终落成的是 ShipCheck，一个面向公开 GitHub 仓库的软件交付检查面板。它能管理项目、复制和编辑模板、调用 GitHub API 做自动审计、补充人工证据、保存不可变报告快照，并提供本地可运行的 Dashboard。题目本身不算特别复杂，但它很适合作为 AI4SE 作业，因为它同时包含需求分析、规则建模、接口设计、前端展示、测试、Docker 化和过程证据记录，能完整体现 agentic software engineering 的闭环。
 
-- Target length: `1500-2500` Chinese characters.
-- Write the final reflection in your own voice.
-- You may use AI for polishing only if you mark that usage clearly.
-- Do not submit this template unchanged.
+在 Superpowers 的整套方法里，对我帮助最大的不是某个“会写代码”的 skill，而是前置的 `brainstorming` 和 `writing-plans`。以前做小项目时，我常常会一边想一边写，最后出现“功能好像能跑，但定义并不清楚”的情况。Superpowers 逼着我先回答：用户是谁、为什么需要这个东西、边界条件有哪些、哪些错误是产品行为而不是实现细节。这一步刚开始会让我觉得节奏变慢，但后面事实证明它非常值得。比如 GitHub 仓库 URL 的规范化、模板复制后是否可编辑、人工证据是否应该跟随模板变更、空仓库和树截断该如何提示，这些问题如果不在 spec 阶段说清楚，后面 subagent 很容易按照自己的“常识”补全，结果就是实现漂移。
 
-## Suggested Structure
+我认为这次项目里最有价值的一个环节，是“让陌生智能体只读 `SPEC.md` 和 `PLAN.md` 来冷启动实现”。这一步本来像一种形式要求，但实际做下来，它几乎是最接近真实同行评审的机制。因为主开发会话和我共享了太多隐含上下文，所以我很容易高估文档的清晰度。冷启动验证暴露出的几个问题都很典型：内置模板虽然有结构定义，却没有列出确切条目；某些文件在计划中出现得太早，诱导智能体创建空壳模块；内置检查项标题和描述不够精确，导致不同实现可能出现不同文案。也就是说，第二个智能体并不是“读不懂”，而是把我没写清楚的地方真实地撞了出来。这让我更相信，好的规约不是看起来完整，而是能在没有口头补充的情况下被别人执行。
 
-### 1. Project Summary
+TDD 在 AI 协作场景里的作用，比我预期更像“防漂移装置”。如果不强制先写失败测试，智能体很容易直接跳到实现，并且一次生成过大的代码块，看似效率高，实际上很难确认每一步到底满足了什么条件。相反，先写测试再实现，会把任务压缩成一个个可验证的最小单元。一个很具体的例子是数据库迁移逻辑：最初 happy path 可以通过，但后来的失败测试暴露出 schema 创建与 seed 写入没有被同一个事务保护，以及 `INSERT OR IGNORE` 会掩盖内置模板漂移问题。也就是说，如果只看“第一次能跑”，这两个问题不会浮出水面；而 TDD 让我们在功能还小的时候就把恢复语义和幂等性做对。对 AI 来说，测试既是约束，也是解释器，它把“应该怎样”翻译成机器最不容易误解的形式。
 
-- What problem did ShipCheck try to solve?
-- Why was this topic suitable for an AI4SE final project?
-- Which design decisions mattered most?
+Subagent-driven development 的效果取决于 task 粒度是否合适。粒度太大，subagent 会因为上下文过宽而开始自由发挥；粒度太小，又会让流程开销压过收益。这次我感觉最合适的任务尺度，是 2 到 5 分钟内能描述清楚、且有明确输入输出和验证命令的小块，例如“实现模板复制并保护内置模板不被修改”“实现 GitHub client 的 404/403/5xx 映射”“实现静态 Dashboard 资产并通过静态资源测试”。在这种粒度下，subagent 既有足够空间完成工作，又不会偏离到重构整个系统。反过来，那些会牵涉多个模块、多个状态流的任务，如果没有先拆开，智能体就容易同时改路由、仓储、前端、测试，最后难以判断问题出在哪里。
 
-### 2. Superpowers Workflow
+从 prompt 和 context engineering 的角度看，这次最有效的策略不是写更长的提示，而是控制上下文边界。我发现最有用的上下文通常只有三类：当前任务的目标、允许改动的文件范围、失败测试或验收条件。只要这三件事明确，智能体的输出质量会明显提高；相反，如果把全部历史、全部架构愿景、全部未来计划一次性塞进去，效果往往更差。另一个关键经验是，描述“不要做什么”必须和“什么情况下算完成”同时出现，否则智能体会把约束理解成一般建议，而不是硬边界。
 
-- Which Superpowers skills helped the most?
-- Which parts felt genuinely useful versus ceremonial?
-- Did the 7-step workflow improve quality or just add process overhead?
+如果只谈前端成品，这次 UI 不算华丽，但我认为它是合格且诚实的。Open Design 的 `dashboard` skill 和 `linear-app` 设计系统帮我避免了那种很常见的“AI 风格大拼盘”界面：到处都是渐变、卡片、发光边框，但信息结构很弱。最终页面用了接近 Linear 的深色表面、收敛的靛蓝强调色、清晰的层级和焦点态，让它更像一个开发者工具，而不是一个浮夸 demo。与此同时，我也意识到 Open Design 不是魔法。它能提供风格与检查清单，但不能替我决定哪些视图真的必要、哪些交互应该为了范围而简化。比如模板编辑器最终仍采用 JSON 文本方式，而不是完整的可视化配置器，这不是设计能力不足，而是对任务边界的主动控制。
 
-### 3. TDD Under AI Collaboration
+如果要批判 Superpowers，这套方法论隐含了几个前提：第一，问题可以被拆成一系列短任务；第二，测试可以作为行为真相来源；第三，开发者有意愿花时间写文档和做复审。在这个项目里，这些前提大体成立，所以方法论收益很明显。但我也看到它的边界：当交付要求涉及外部平台权限时，例如 GitHub PR 创建权限、Docker 本地可执行环境、公共镜像发布，这些都不是更强的 prompt 就能解决的。也就是说，Superpowers 擅长把“本地工程行为”做扎实，却不能消除真实世界中的账户、权限和基础设施依赖。最终最重要的人类职责，依然是识别哪些问题属于设计与实现，哪些问题属于外部条件，并诚实地区分它们。
 
-- How did forced RED-GREEN-REFACTOR feel in practice?
-- Did TDD slow the work down or keep the agents honest?
-- Give one concrete example where a failing test changed the implementation.
-
-### 4. Subagents And Task Decomposition
-
-- How well did subagent-driven development work?
-- What task size was most effective?
-- Where did a subagent go off track, and what spec or context problem caused it?
-
-### 5. Specification Quality
-
-- How did `SPEC.md` and `PLAN.md` affect later code quality?
-- What ambiguity was exposed by the cold-start validation?
-- Which spec revisions had the highest payoff?
-
-### 6. Prompt And Context Engineering
-
-- Which prompt or context strategy worked best?
-- What signals told you an agent had too much or too little context?
-- What would you standardize for the next project?
-
-### 7. UI And Open Design
-
-- If Open Design was used, how much did it improve the UI result?
-- Did it reduce generic AI-generated interface patterns?
-- What remained rough or overly mechanical?
-
-### 8. Critique Of The Method
-
-- What assumptions does Superpowers make about good software work?
-- Which assumptions held for this project and which did not?
-- Where did human judgment matter most?
-
-### 9. If Rebuilding
-
-- What would you do differently next time?
-- What would you keep exactly the same?
-
-## Optional Starter Bullets
-
-- Cold-start validation found specification gaps faster than expected.
-- TDD worked best when the task boundary was narrow and observable.
-- The strongest human role was not typing code but correcting ambiguous decisions.
-- The biggest unfinished items were external delivery artifacts, not local implementation.
+如果再做一次，我会更早地把远程仓库、PR 权限、Docker 环境这些外部条件检查掉，而不是等本地实现完成后再统一补发布流程；这样可以更早发现“功能完成不等于作业完成”的差距。但有几件事我会原样保留：先规约后编码、用冷启动验证 spec、严格 TDD、把过程证据写进 `AGENT_LOG.md`。它们共同带来的最大改变是，我不再把 AI 当成一个“更快的自动补全器”，而是把它看成一个必须被流程约束、被测试验证、被人类判断校正的协作系统。对当前 AI4SE 工具和方法论的整体看法也是如此：它们已经足够强，强到工程师真正稀缺的能力不再是“能不能写代码”，而是“能不能定义问题、设计约束、识别风险，并对结果负责”。
